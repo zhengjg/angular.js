@@ -30,9 +30,9 @@ module.exports = function(grunt) {
           stream: true,
         },
         tasks: [
-          util.parallelTask('test:modules'),
-          util.parallelTask('test:jquery'),
-          util.parallelTask('test:jqlite'),
+          util.parallelTask('tests:modules'),
+          util.parallelTask('tests:jquery'),
+          util.parallelTask('tests:jqlite'),
           util.parallelTask('test:e2e')
         ]
       }
@@ -59,6 +59,11 @@ module.exports = function(grunt) {
       },
       testserver: {
         options: {
+          // We use end2end task (which does not start the webserver)
+          // and start the webserver as a separate process (in travis_build.sh)
+          // to avoid https://github.com/joyent/libuv/issues/826
+          port: 8000,
+          hostname: '0.0.0.0',
           middleware: function(connect, options){
             return [
               function(req, resp, next) {
